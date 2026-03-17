@@ -10,7 +10,7 @@ if (!ENV.DATABASE_URL) {
 // initialize PostgreSQL connection pool
 const pool = new Pool({ connectionString: ENV.DATABASE_URL });
 
-// log when first connection is made
+// log when a new pooled client connects
 pool.on("connect", () => {
   console.log("Database connected successfully ✅");
 });
