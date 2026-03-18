@@ -20,25 +20,21 @@ export const getUserById = async (id: string) => {
 };
 
 export const updateUser = async (id: string, data: Partial<NewUser>) => {
-  const existingUser = await getUserById(id);
-  if (!existingUser) {
+  const result = await db
+    .update(users)
+    .set(data)
+    .where(eq(users.id, id))
+    .returning();
+  if (result.length === 0) {
     throw new Error(`User with id ${id} not found`);
   }
-
-  const [user] = await db.update(users).set(data).where(eq(users.id, id)).returning();
+  const [user] = result;
   return user;
 };
 
 // upsert => create or update
 
 export const upsertUser = async (data: NewUser) => {
-  // this is what we have done first
-  // const existingUser = await getUserById(data.id);
-  // if (existingUser) return updateUser(data.id, data);
-
-  // return createUser(data);
-
-  // and this is what CR suggested
   const [user] = await db
     .insert(users)
     .values(data)
@@ -91,7 +87,11 @@ export const updateProduct = async (id: string, data: Partial<NewProduct>) => {
     throw new Error(`Product with id ${id} not found`);
   }
 
-  const [product] = await db.update(products).set(data).where(eq(products.id, id)).returning();
+  const [product] = await db
+    .update(products)
+    .set(data)
+    .where(eq(products.id, id))
+    .returning();
   return product;
 };
 
@@ -101,7 +101,10 @@ export const deleteProduct = async (id: string) => {
     throw new Error(`Product with id ${id} not found`);
   }
 
-  const [product] = await db.delete(products).where(eq(products.id, id)).returning();
+  const [product] = await db
+    .delete(products)
+    .where(eq(products.id, id))
+    .returning();
   return product;
 };
 
@@ -117,7 +120,10 @@ export const deleteComment = async (id: string) => {
     throw new Error(`Comment with id ${id} not found`);
   }
 
-  const [comment] = await db.delete(comments).where(eq(comments.id, id)).returning();
+  const [comment] = await db
+    .delete(comments)
+    .where(eq(comments.id, id))
+    .returning();
   return comment;
 };
 
