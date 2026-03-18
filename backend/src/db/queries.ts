@@ -82,16 +82,15 @@ export const getProductsByUserId = async (userId: string) => {
 };
 
 export const updateProduct = async (id: string, data: Partial<NewProduct>) => {
-  const existingProduct = await getProductById(id);
-  if (!existingProduct) {
-    throw new Error(`Product with id ${id} not found`);
-  }
-
-  const [product] = await db
+  const result = await db
     .update(products)
     .set(data)
     .where(eq(products.id, id))
     .returning();
+  if (result.length === 0) {
+    throw new Error(`Product with id ${id} not found`);
+  }
+  const [product] = result;
   return product;
 };
 
@@ -115,15 +114,14 @@ export const createComment = async (data: NewComment) => {
 };
 
 export const deleteComment = async (id: string) => {
-  const existingComment = await getCommentById(id);
-  if (!existingComment) {
-    throw new Error(`Comment with id ${id} not found`);
-  }
-
-  const [comment] = await db
+  const result = await db
     .delete(comments)
     .where(eq(comments.id, id))
     .returning();
+  if (result.length === 0) {
+    throw new Error(`Comment with id ${id} not found`);
+  }
+  const [comment] = result;
   return comment;
 };
 
