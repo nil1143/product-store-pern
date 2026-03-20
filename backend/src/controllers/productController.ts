@@ -110,7 +110,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
     const { userId } = getAuth(req);
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
-    const { id } = req.params as { id: string };;
+    const { id } = req.params as { id: string };
 
     // Check if product exists and belongs to user
     const existingProduct = await queries.getProductById(id);
