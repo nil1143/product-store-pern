@@ -3,6 +3,9 @@ import type { Request, Response } from "express";
 import * as queries from "../db/queries";
 import { getAuth } from "@clerk/express";
 
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 // Get all products (public)
 export const getAllProducts = async (req: Request, res: Response) => {
   try {
@@ -32,6 +35,10 @@ export const getMyProducts = async (req: Request, res: Response) => {
 export const getProductById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params as { id: string };
+    if (!UUID_RE.test(id)) {
+      return res.status(400).json({ error: "Invalid product id" });
+    }
+
     const product = await queries.getProductById(id);
 
     if (!product) return res.status(404).json({ error: "Product not found" });
@@ -52,7 +59,9 @@ export const createProduct = async (req: Request, res: Response) => {
     const { title, description, imageUrl } = req.body;
 
     if (!title || !description || !imageUrl) {
-      res.status(400).json({ error: "Title, description, and imageUrl are required" });
+      res
+        .status(400)
+        .json({ error: "Title, description, and imageUrl are required" });
       return;
     }
 
@@ -77,6 +86,9 @@ export const updateProduct = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const { id } = req.params as { id: string };
+    if (!UUID_RE.test(id)) {
+      return res.status(400).json({ error: "Invalid product id" });
+    }
     const { title, description, imageUrl } = req.body;
 
     // Check if product exists and belongs to user
@@ -111,6 +123,9 @@ export const deleteProduct = async (req: Request, res: Response) => {
     if (!userId) return res.status(401).json({ error: "Unauthorized" });
 
     const { id } = req.params as { id: string };
+    if (!UUID_RE.test(id)) {
+      return res.status(400).json({ error: "Invalid product id" });
+    }
 
     // Check if product exists and belongs to user
     const existingProduct = await queries.getProductById(id);
