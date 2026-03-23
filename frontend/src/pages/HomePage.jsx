@@ -7,7 +7,7 @@ import { SignInButton, useAuth } from "@clerk/react";
 
 function HomePage() {
   const { isSignedIn } = useAuth();
-  const { data: products, isLoading, error } = useProducts();
+  const { data: products = [], isLoading, error } = useProducts();
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -41,8 +41,8 @@ function HomePage() {
             </p>
             {isSignedIn ? (
               <Link to="/create" className="btn btn-primary">
-                  <SparklesIcon className="size-4" />
-                  Start Selling
+                <SparklesIcon className="size-4" />
+                Start Selling
               </Link>
             ) : (
               <SignInButton mode="modal">
@@ -73,9 +73,17 @@ function HomePage() {
               <p className="text-base-content/40 text-sm">
                 Be the first to share something!
               </p>
-              <Link to="/create" className="btn btn-primary btn-sm mt-2">
-                Create Product
-              </Link>
+              {isSignedIn ? (
+                <Link to="/create" className="btn btn-primary btn-sm mt-2">
+                  Create Product
+                </Link>
+              ) : (
+                <SignInButton mode="modal">
+                  <button className="btn btn-primary btn-sm mt-2">
+                    Create Product
+                  </button>
+                </SignInButton>
+              )}
             </div>
           </div>
         ) : (
