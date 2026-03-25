@@ -11,7 +11,9 @@ import {
 
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { data: products, isLoading } = useMyProducts();
+  // const { data: products, isLoading } = useMyProducts();
+  const { data, isLoading, error } = useMyProducts();
+  const products = data ?? [];
   const deleteProduct = useDeleteProduct();
 
   const handleDelete = (id) => {
@@ -19,6 +21,17 @@ const ProfilePage = () => {
   };
 
   if (isLoading) return <LoadingSpinner />;
+
+  if (error) {
+    return (
+      <div className="card bg-base-300">
+        <div className="card-body items-center text-center py-16">
+          <h2 className="card-title text-error">Couldn't load your products</h2>
+          <p className="text-sm text-base-content/60">Please try again.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
