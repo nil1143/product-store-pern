@@ -41,7 +41,7 @@ const ProfilePage = () => {
           <p className="text-base-content/60 text-sm">Manage your listings</p>
         </div>
         <Link to="/create" className="btn btn-primary btn-sm gap-1">
-          <PlusIcon className="size-4" /> New
+          <PlusIcon className="size-4" /> New Product
         </Link>
       </div>
 
@@ -88,20 +88,20 @@ const ProfilePage = () => {
                     onClick={() => navigate(`/product/${product.id}`)}
                     className="btn btn-ghost btn-xs gap-1"
                   >
-                    <EyeIcon className="size-3" /> View
+                    <EyeIcon className="size-5" /> View
                   </button>
                   <button
                     onClick={() => navigate(`/edit/${product.id}`)}
                     className="btn btn-ghost btn-xs gap-1"
                   >
-                    <EditIcon className="size-3" /> Edit
+                    <EditIcon className="size-5" /> Edit
                   </button>
                   <button
                     onClick={() => handleDelete(product.id)}
                     className="btn btn-ghost btn-xs text-error gap-1"
                     disabled={deleteProduct.isPending}
                   >
-                    <Trash2Icon className="size-3" /> Delete
+                    <Trash2Icon className="size-5" /> Delete
                   </button>
                 </div>
               </div>

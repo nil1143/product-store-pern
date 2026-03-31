@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
         <img
           src={product.imageUrl}
           alt={product.title}
-          className="rounded-xl h-40 w-full object-cover"
+          className="rounded-xl h-40 w-full object-contain"
         />
       </figure>
       <div className="card-body p-4">
